@@ -19,6 +19,19 @@ jobs:
       
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: 'src'
+          path: '.'
       
       - uses: actions/deploy-pages@v4
+```
+
+**変更点：`path: 'src'` → `path: '.'`**
+
+4. **「Commit changes」** をクリック
+
+---
+
+## 1-2分待つ
+
+Actionsで緑チェックになったら：
+```
+https://sushicoder423.github.io/global-matome/
