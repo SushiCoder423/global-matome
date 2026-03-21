@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
@@ -25,15 +25,36 @@ jobs:
       
       - name: Fetch Reddit posts
         run: |
-          python scripts/auto_fetch_reddit.py
+          cd scripts
+          python auto_fetch_reddit.py
       
-      - name: Update index.html
+      - name: Check if content was fetched
         run: |
-          python scripts/update_html.py
+          if [ -f "scripts/reddit_content.json" ]; then
+            echo "✅ Reddit content fetched successfully"
+            cat scripts/reddit_content.json | head -20
+          else
+            echo "❌ Failed to fetch Reddit content"
+            exit 1
+          fi
       
-      - name: Commit and push if changed
+      - name: List files for debugging
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in current directory:"
+          ls -la
+          echo "Files in scripts directory:"
+          ls -la scripts/
+      
+      - name: Update index.html (simple version)
+        run: |
+          echo "Skipping HTML update for now - just testing Reddit fetch"
+          echo "Content fetched successfully!"
+      
+      - name: Commit results (optional)
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git add index.html
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update: Daily Reddit fetch $(date +'%Y-%m-%d')" && git push)
+          git add scripts/reddit_content.json || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Fetched Reddit data $(date +'%Y-%m-%d')" && git push) || echo "No changes to commit"
