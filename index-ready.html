@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Global Matome - World Discussion Boards Digest</title>
+    <meta name="description" content="Daily digest from Reddit, PTT, Forocoches, Hardmob and more!">
+    
+    <!-- Google AdSense - Replace YOUR_PUBLISHER_ID with your actual ID -->
+    <!-- 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+         crossorigin="anonymous"></script>
+    -->
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .tagline { font-size: 1.1rem; opacity: 0.95; }
+        
+        .language-tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tab {
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .tab:hover { background: #e0e0e0; transform: translateY(-2px); }
+        .tab.active { background: #667eea; color: white; border-color: #667eea; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .thread-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .thread-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        .thread-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .thread-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .related-products {
+            margin-top: 15px;
+        }
+        .products-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .product-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .product-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .product-link:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .adsense-box {
+            background: #f8f9fa;
+            border: 2px dashed #ccc;
+            padding: 100px 20px;
+            text-align: center;
+            color: #999;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .thread-title { font-size: 1.1rem; }
+            .product-links { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 id="site-title">🌍 Global Matome</h1>
+        <p class="tagline" id="site-tagline">Daily viral posts from discussion boards worldwide!</p>
+    </div>
+
+    <div class="language-tabs">
+        <div class="tab active" data-lang="en">🇺🇸 English</div>
+        <div class="tab" data-lang="es">🇪🇸 Español</div>
+        <div class="tab" data-lang="pt">🇧🇷 Português</div>
+        <div class="tab" data-lang="fr">🇫🇷 Français</div>
+        <div class="tab" data-lang="zh-tw">🇹🇼 繁體中文</div>
+        <div class="tab" data-lang="zh-cn">🇨🇳 简体中文</div>
+    </div>
+
+    <div class="container">
+        <div id="threads-container"></div>
+
+        <!-- Google AdSense Ad Unit -->
+        <div class="adsense-box">
+            Google AdSense Ad Space<br>
+            <small>Ads will appear here after approval</small>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p id="footer-text">© 2024 Global Matome | Aggregating discussion boards worldwide</p>
+        <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 5px;" id="footer-disclaimer">
+            Content sourced from public discussion boards. Original posts belong to their respective authors.
+        </p>
+    </div>
+
+    <script>
+        const content = {
+            en: {
+                siteTitle: '🌍 Global Matome',
+                tagline: 'Daily viral posts from discussion boards worldwide!',
+                productsTitle: '💡 Related:',
+                footerText: '© 2024 Global Matome | Aggregating discussion boards worldwide',
+                footerDisclaimer: 'Content sourced from public discussion boards. Original posts belong to their respective authors.',
+                threads: [
+                    {
+                        emoji: '🖥️',
+                        title: '【Sad News】Redditor bought $2000 PC and it doesn\'t boot lmao',
+                        source: 'r/pcmasterrace',
+                        upvotes: 12500,
+                        comments: 247,
+                        products: [
+                            { icon: '🔧', text: 'PC Diagnostic Tools', url: 'https://amazon.com/s?k=pc+diagnostic+tools&tag=livewellpicks-20' },
+                            { icon: '🛠️', text: 'Motherboards 2024', url: 'https://amazon.com/s?k=gaming+motherboard&tag=livewellpicks-20' },
+                            { icon: '📦', text: 'Pre-built PCs', url: 'https://amazon.com/s?k=gaming+pc&tag=livewellpicks-20' }
+                        ]
+                    },
+                    {
+                        emoji: '🇯🇵',
+                        title: '【Pic】American tried Japanese vending machine, reaction is 💀',
+                        source: 'r/Japan',
+                        upvotes: 8900,
+                        comments: 156,
+                        products: [
+                            { icon: '🍜', text: 'Japanese Snacks', url: 'https://amazon.com/s?k=japanese+snacks&tag=livewellpicks-20' },
+                            { icon: '🎌', text: 'Japan Travel Guides', url: 'https://amazon.com/s?k=japan+travel+guide&tag=livewellpicks-20' }
+                        ]
+                    },
+                    {
+                        emoji: '💼',
+                        title: '【Help】How to tell my boss I quit - strategies needed lol',
+                        source: 'r/antiwork',
+                        upvotes: 34200,
+                        comments: 892,
+                        products: [
+                            { icon: '📚', text: 'Career Books', url: 'https://amazon.com/s?k=career+change+books&tag=livewellpicks-20' },
+                            { icon: '💻', text: 'Remote Work Setup', url: 'https://amazon.com/s?k=home+office+setup&tag=livewellpicks-20' }
+                        ]
+                    }
+                ]
+            },
+            es: {
+                siteTitle: '🌍 Global Matome',
+                tagline: '¡Posts virales diarios de foros de todo el mundo!',
+                productsTitle: '💡 Relacionado:',
+                footerText: '© 2024 Global Matome | Recopilando foros de discusión mundiales',
+                footerDisclaimer: 'Contenido de foros públicos. Los posts originales pertenecen a sus autores.',
+                threads: [
+                    {
+                        emoji: '🚗',
+                        title: '【Triste】Español compró coche usado, encontró 10kg de jamón jajaja',
+                        source: 'Forocoches',
+                        upvotes: 15600,
+                        comments: 423,
+                        products: [
+                            { icon: '🔍', text: 'Inspección de coches', url: 'https://amazon.es/s?k=inspeccion+coche&tag=livewellpicks-20' },
+                            { icon: '🍖', text: 'Jamón ibérico', url: 'https://amazon.es/s?k=jamon+iberico&tag=livewellpicks-20' }
+                        ]
+                    },
+                    {
+                        emoji: '🥩',
+                        title: '【Foto】Argentino hizo asado perfecto, vecinos en shock xD',
+                        source: 'Taringa',
+                        upvotes: 9800,
+                        comments: 234,
+                        products: [
+                            { icon: '🔥', text: 'Parrillas', url: 'https://mercadolibre.com.ar/parrillas' },
+                            { icon: '📖', text: 'Recetas asado', url: 'https://amazon.com/s?k=recetas+asado&tag=livewellpicks-20' }
+                        ]
+                    }
+                ]
+            },
+            pt: {
+                siteTitle: '🌍 Global Matome',
+                tagline: 'Posts virais diários de fóruns do mundo todo!',
+                productsTitle: '💡 Relacionado:',
+                footerText: '© 2024 Global Matome | Agregando fóruns de discussão mundiais',
+                footerDisclaimer: 'Conteúdo de fóruns públicos. Posts originais pertencem aos seus autores.',
+                threads: [
+                    {
+                        emoji: '⚡',
+                        title: '【Triste】Brasileiro montou PC Gamer, conta de luz R$800 kkkkkk',
+                        source: 'Hardmob',
+                        upvotes: 18900,
+                        comments: 567,
+                        products: [
+                            { icon: '💻', text: 'PCs Gamer', url: 'https://amazon.com.br/s?k=pc+gamer&tag=livewellpicks-20' },
+                            { icon: '💡', text: 'Economia de energia', url: 'https://amazon.com.br/s?k=economia+energia&tag=livewellpicks-20' }
+                        ]
+                    },
+                    {
+                        emoji: '🏖️',
+                        title: '【Bom】Português achou praia secreta no Algarve rsrsrs',
+                        source: 'Reddit PT',
+                        upvotes: 7200,
+                        comments: 189,
+                        products: [
+                            { icon: '🏖️', text: 'Guias de Portugal', url: 'https://amazon.com/s?k=portugal+travel+guide&tag=livewellpicks-20' },
+                            { icon: '🏄', text: 'Equipamento praia', url: 'https://amazon.com.br/s?k=equipamento+praia&tag=livewellpicks-20' }
+                        ]
+                    }
+                ]
+            },
+            fr: {
+                siteTitle: '🌍 Global Matome',
+                tagline: 'Posts viraux quotidiens des forums du monde entier!',
+                productsTitle: '💡 Lié:',
+                footerText: '© 2024 Global Matome | Agrégation de forums mondiaux',
+                footerDisclaimer: 'Contenu des forums publics. Les posts originaux appartiennent à leurs auteurs.',
+                threads: [
+                    {
+                        emoji: '🥖',
+                        title: '【Triste】Français a acheté baguette molle mdr',
+                        source: 'JVC 18-25',
+                        upvotes: 34500,
+                        comments: 892,
+                        products: [
+                            { icon: '🥖', text: 'Machines à pain', url: 'https://amazon.fr/s?k=machine+pain&tag=livewellpicks-20' },
+                            { icon: '🇫🇷', text: 'Cuisine française', url: 'https://amazon.fr/s?k=cuisine+francaise&tag=livewellpicks-20' }
+                        ]
+                    },
+                    {
+                        emoji: '📡',
+                        title: '【Photo】Congolais: 2MB/s pour 100€/mois ptdr',
+                        source: 'Reddit France',
+                        upvotes: 18900,
+                        comments: 445,
+                        products: [
+                            { icon: '📡', text: 'Routeurs WiFi', url: 'https://amazon.fr/s?k=routeur+wifi&tag=livewellpicks-20' },
+                            { icon: '💻', text: 'Tech abordable', url: 'https://cdiscount.com' }
+                        ]
+                    }
+                ]
+            },
+            'zh-tw': {
+                siteTitle: '🌍 全球まとめ',
+                tagline: '每日精選世界各大討論版熱門貼文！',
+                productsTitle: '💡 相關商品：',
+                footerText: '© 2024 Global Matome | 彙整全球討論版',
+                footerDisclaimer: '內容來自公開討論版。原始貼文版權歸原作者所有。',
+                threads: [
+                    {
+                        emoji: '🍗',
+                        title: '【悲報】台灣鄉民買雞排結果是素的笑死',
+                        source: 'PTT八卦板',
+                        upvotes: 11200,
+                        comments: 345,
+                        products: [
+                            { icon: '🍗', text: '雞排推薦', url: 'https://shopee.tw/search?keyword=%E9%9B%9E%E6%8E%92' },
+                            { icon: '🥗', text: '素食料理', url: 'https://shopee.tw/search?keyword=%E7%B4%A0%E9%A3%9F' }
+                        ]
+                    },
+                    {
+                        emoji: '💰',
+                        title: '【圖片】Dcard網友曬台積電offer薪水wwwww',
+                        source: 'Dcard',
+                        upvotes: 23400,
+                        comments: 678,
+                        products: [
+                            { icon: '📚', text: '求職技巧書', url: 'https://shopee.tw/search?keyword=%E6%B1%82%E8%81%B7' },
+                            { icon: '💼', text: '職場穿搭', url: 'https://shopee.tw/search?keyword=%E8%81%B7%E5%A0%B4' }
+                        ]
+                    }
+                ]
+            },
+            'zh-cn': {
+                siteTitle: '🌍 全球まとめ',
+                tagline: '每日精选世界各大讨论版热门帖子！',
+                productsTitle: '💡 相关商品：',
+                footerText: '© 2024 Global Matome | 汇总全球讨论版',
+                footerDisclaimer: '内容来自公开讨论版。原始帖子版权归原作者所有。',
+                threads: [
+                    {
+                        emoji: '🍗',
+                        title: '【悲报】台湾网友买鸡排结果是素的哈哈哈',
+                        source: 'PTT八卦板（简体版）',
+                        upvotes: 11200,
+                        comments: 345,
+                        products: [
+                            { icon: '🍗', text: '炸鸡推荐', url: 'https://s.taobao.com/search?q=%E7%82%B8%E9%B8%A1' },
+                            { icon: '🥗', text: '素食食谱', url: 'https://s.taobao.com/search?q=%E7%B4%A0%E9%A3%9F' }
+                        ]
+                    },
+                    {
+                        emoji: '💰',
+                        title: '【图片】网友晒台积电offer工资2333',
+                        source: 'Dcard（简体版）',
+                        upvotes: 23400,
+                        comments: 678,
+                        products: [
+                            { icon: '📚', text: '求职技巧', url: 'https://s.taobao.com/search?q=%E6%B1%82%E8%81%8C' },
+                            { icon: '💼', text: '职场装备', url: 'https://s.taobao.com/search?q=%E8%81%8C%E5%9C%BA' }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentLang = 'en';
+
+        function renderThreads(lang) {
+            const container = document.getElementById('threads-container');
+            const data = content[lang];
+            
+            document.getElementById('site-title').textContent = data.siteTitle;
+            document.getElementById('site-tagline').textContent = data.tagline;
+            document.getElementById('footer-text').textContent = data.footerText;
+            document.getElementById('footer-disclaimer').textContent = data.footerDisclaimer;
+            
+            container.innerHTML = '';
+            
+            data.threads.forEach(thread => {
+                const card = document.createElement('div');
+                card.className = 'thread-card';
+                
+                const productsHTML = `
+                    <div class="related-products">
+                        <div class="products-title">${data.productsTitle}</div>
+                        <div class="product-links">
+                            ${thread.products.map(p => `
+                                <a href="${p.url}" class="product-link" target="_blank" rel="noopener">
+                                    ${p.icon} ${p.text}
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                card.innerHTML = `
+                    <div class="thread-title">
+                        ${thread.emoji} ${thread.title}
+                    </div>
+                    <div class="thread-meta">
+                        📍 ${thread.source} | 👍 ${thread.upvotes.toLocaleString()} | 💬 ${thread.comments}
+                    </div>
+                    ${productsHTML}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentLang = this.dataset.lang;
+                renderThreads(currentLang);
+            });
+        });
+
+        renderThreads(currentLang);
+    </script>
+</body>
+</html>
