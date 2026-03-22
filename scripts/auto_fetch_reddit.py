@@ -1,46 +1,60 @@
 #!/usr/bin/env python3
 """
 Reddit Auto-Fetcher for Global Matome
-毎日自動でRedditから人気投稿を取得してサイトを更新
+毎日4回自動でRedditから人気投稿を取得
 """
 
 import json
 import requests
 from datetime import datetime
 
-# Reddit API設定（認証不要の公開API使用）
 REDDIT_API = "https://www.reddit.com"
 USER_AGENT = "GlobalMatome/1.0"
 
-# 取得するサブレディット
+# 20サブレディットに拡大
 SUBREDDITS = {
     'en': [
         'pcmasterrace',
-        'antiwork', 
+        'antiwork',
         'todayilearned',
         'LifeProTips',
-        'mildlyinteresting'
+        'mildlyinteresting',
+        'gaming',
+        'technology',
+        'Showerthoughts',
+        'explainlikeimfive',
+        'oddlysatisfying',
+        'nextfuckinglevel',
+        'Damnthatsinteresting',
+        'interestingasfuck',
+        'WTF',
+        'facepalm',
+        'therewasanattempt',
+        'instant_regret',
+        'Wellthatsucks',
+        'PublicFreakout',
+        'aww'
     ]
 }
 
-# なんJ風タイトルテンプレート
 TITLE_TEMPLATES = {
-    'sad': ['【Sad News】', '【Breaking】'],
-    'happy': ['【Good News】', '【Win】'],
-    'pic': ['【Pic】', '【Image】'],
-    'help': ['【Help】', '【Question】']
+    'sad': ['【Sad News】', '【Breaking】', '【Fail】'],
+    'happy': ['【Good News】', '【Win】', '【Success】'],
+    'pic': ['【Pic】', '【Image】', '【Look】'],
+    'help': ['【Help】', '【Question】', '【Urgent】'],
+    'wtf': ['【WTF】', '【Crazy】', '【Wild】']
 }
 
-ENDINGS = ['lmao', '💀', 'lol']
+ENDINGS = ['lmao', '💀', 'lol', 'fr fr']
 
 def get_reddit_hot_posts(subreddit, limit=5):
-    """Redditから人気投稿を取得"""
+    """Redditから人気投稿を取得（1回あたり5件に削減）"""
     url = f"{REDDIT_API}/r/{subreddit}/hot.json"
     headers = {'User-Agent': USER_AGENT}
     params = {'limit': limit}
     
     try:
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params=params, timeout=10)
         response.raise_for_status()
         data = response.json()
         
@@ -48,14 +62,19 @@ def get_reddit_hot_posts(subreddit, limit=5):
         for post in data['data']['children']:
             p = post['data']
             
-            # 伸びてる記事を判別
             score = p.get('score', 0)
             comments = p.get('num_comments', 0)
             
-            # 基準: アップ票1000以上、またはコメント100以上
-            if score >= 1000 or comments >= 100:
+            # 基準を緩和: アップ票500以上、またはコメント50以上
+            if score >= 500 or comments >= 50:
+                # 本文を取得（selftext）
+                body = p.get('selftext', '')
+                if len(body) > 500:
+                    body = body[:500] + '...'
+                
                 posts.append({
                     'title': p['title'],
+                    'body': body if body else '[No text content]',
                     'score': score,
                     'comments': comments,
                     'url': f"https://reddit.com{p['permalink']}",
@@ -67,68 +86,67 @@ def get_reddit_hot_posts(subreddit, limit=5):
         print(f"Error fetching {subreddit}: {e}")
         return []
 
-def detect_post_mood(title):
+def detect_post_mood(title, body=''):
     """投稿の雰囲気を自動判定"""
-    title_lower = title.lower()
+    text = (title + ' ' + body).lower()
     
-    # ネガティブワード
-    if any(word in title_lower for word in ['broke', 'fail', 'broken', 'doesn\'t work', 'quit', 'fired']):
+    if any(word in text for word in ['broke', 'fail', 'broken', 'doesn\'t work', 'quit', 'fired', 'lost', 'died']):
         return 'sad'
     
-    # ポジティブワード
-    if any(word in title_lower for word in ['success', 'won', 'finally', 'achievement', 'proud']):
+    if any(word in text for word in ['wtf', 'crazy', 'insane', 'wild', 'unbelievable']):
+        return 'wtf'
+    
+    if any(word in text for word in ['success', 'won', 'finally', 'achievement', 'proud', 'happy']):
         return 'happy'
     
-    # 画像系
-    if any(word in title_lower for word in ['picture', 'photo', 'image', 'look at']):
+    if any(word in text for word in ['picture', 'photo', 'image', 'look at', 'check out']):
         return 'pic'
     
-    # 質問・ヘルプ
-    if any(word in title_lower for word in ['how to', 'help', 'question', 'advice']):
+    if any(word in text for word in ['how to', 'help', 'question', 'advice', 'eli5']):
         return 'help'
     
-    # デフォルトはsad（なんJっぽい）
     return 'sad'
 
 def convert_to_nanj_style(post):
     """なんJ風タイトルに変換"""
-    mood = detect_post_mood(post['title'])
+    mood = detect_post_mood(post['title'], post.get('body', ''))
     prefix = TITLE_TEMPLATES[mood][0]
-    ending = ENDINGS[0]  # lmao
+    ending = ENDINGS[0]
     
-    # タイトルを短縮（長すぎる場合）
     title = post['title']
     if len(title) > 80:
         title = title[:77] + '...'
     
-    nanj_title = f"{prefix} {title} {ending}"
-    
-    return nanj_title
+    return f"{prefix} {title} {ending}"
 
-def get_related_products(post_title):
+def get_related_products(post_title, post_body=''):
     """投稿内容から関連商品を自動判定"""
-    title_lower = post_title.lower()
+    text = (post_title + ' ' + post_body).lower()
     
-    # キーワードマッチング
-    if 'pc' in title_lower or 'computer' in title_lower:
+    if any(word in text for word in ['pc', 'computer', 'gaming', 'build']):
         return [
             {'icon': '🔧', 'text': 'PC Diagnostic Tools', 'keyword': 'pc+diagnostic+tools'},
             {'icon': '🛠️', 'text': 'PC Parts', 'keyword': 'gaming+pc+parts'}
         ]
     
-    if 'quit' in title_lower or 'job' in title_lower or 'work' in title_lower:
+    if any(word in text for word in ['quit', 'job', 'work', 'boss', 'career']):
         return [
             {'icon': '📚', 'text': 'Career Books', 'keyword': 'career+change+books'},
             {'icon': '💻', 'text': 'Work From Home', 'keyword': 'home+office+setup'}
         ]
     
-    if 'food' in title_lower or 'cook' in title_lower or 'recipe' in title_lower:
+    if any(word in text for word in ['food', 'cook', 'recipe', 'eat']):
         return [
             {'icon': '🍳', 'text': 'Cooking Tools', 'keyword': 'cooking+tools'},
             {'icon': '📖', 'text': 'Recipe Books', 'keyword': 'cookbook'}
         ]
     
-    # デフォルト
+    if any(word in text for word in ['game', 'gaming', 'play']):
+        return [
+            {'icon': '🎮', 'text': 'Gaming Gear', 'keyword': 'gaming+accessories'},
+            {'icon': '🕹️', 'text': 'Controllers', 'keyword': 'gaming+controller'}
+        ]
+    
     return [
         {'icon': '🛒', 'text': 'Shop on Amazon', 'keyword': 'popular+items'}
     ]
@@ -139,22 +157,26 @@ def generate_emoji(subreddit, title):
     
     if 'pc' in title_lower or 'computer' in title_lower:
         return '🖥️'
-    if 'cat' in title_lower or 'dog' in title_lower:
+    if 'cat' in title_lower or 'dog' in title_lower or 'pet' in title_lower:
         return '🐱'
     if 'food' in title_lower:
         return '🍔'
     if 'work' in title_lower or 'job' in title_lower:
         return '💼'
-    if 'money' in title_lower:
+    if 'money' in title_lower or 'paid' in title_lower:
         return '💰'
+    if 'game' in title_lower or 'gaming' in title_lower:
+        return '🎮'
     
-    # サブレディット別デフォルト
     subreddit_emojis = {
         'pcmasterrace': '🖥️',
         'antiwork': '💼',
         'todayilearned': '📚',
         'LifeProTips': '💡',
-        'mildlyinteresting': '👀'
+        'mildlyinteresting': '👀',
+        'gaming': '🎮',
+        'technology': '📱',
+        'aww': '🐱'
     }
     
     return subreddit_emojis.get(subreddit, '📰')
@@ -173,18 +195,18 @@ def fetch_all_posts():
     }
     
     print(f"🌍 Starting Reddit fetch at {datetime.now()}")
+    print(f"📡 Fetching from {len(SUBREDDITS['en'])} subreddits...")
     
     for subreddit in SUBREDDITS['en']:
-        print(f"📡 Fetching r/{subreddit}...")
+        print(f"  📡 Fetching r/{subreddit}...")
         posts = get_reddit_hot_posts(subreddit, limit=10)
         
-        # Top 3のみ取得
-        for post in posts[:3]:
+        # Top 5のみ取得
+        for post in posts[:5]:
             emoji = generate_emoji(subreddit, post['title'])
             nanj_title = convert_to_nanj_style(post)
-            products = get_related_products(post['title'])
+            products = get_related_products(post['title'], post.get('body', ''))
             
-            # 商品リンク生成
             product_links = []
             for p in products:
                 product_links.append({
@@ -196,16 +218,19 @@ def fetch_all_posts():
             thread_data = {
                 'emoji': emoji,
                 'title': nanj_title,
+                'body': post.get('body', ''),
                 'source': f"r/{subreddit}",
                 'upvotes': post['score'],
                 'comments': post['comments'],
-                'products': product_links
+                'products': product_links,
+                'original_url': post['url']
             }
             
             all_content['en']['threads'].append(thread_data)
-            print(f"  ✅ Added: {nanj_title[:50]}...")
+            print(f"    ✅ Added: {nanj_title[:50]}...")
     
     print(f"\n✅ Total posts fetched: {len(all_content['en']['threads'])}")
+    print(f"📊 Target: 100 posts (20 subreddits × 5 posts)")
     return all_content
 
 def save_to_json(content, filename='reddit_content.json'):
@@ -215,11 +240,6 @@ def save_to_json(content, filename='reddit_content.json'):
     print(f"💾 Saved to {filename}")
 
 if __name__ == '__main__':
-    # 投稿を取得
     content = fetch_all_posts()
-    
-    # JSONに保存
     save_to_json(content)
-    
     print("\n🎉 Done! Content updated successfully.")
-    print("Next: Update index.html with this content")
