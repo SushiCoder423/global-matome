@@ -2,8 +2,9 @@ name: Auto Update from Reddit
 
 on:
   schedule:
-    # 毎日 UTC 0:00 (日本時間 9:00) に実行
-    - cron: '0 0 * * *'
+    # 1日4回更新: 0時、6時、12時、18時 (UTC)
+    # 日本時間: 9時、15時、21時、翌3時
+    - cron: '0 0,6,12,18 * * *'
   workflow_dispatch: # 手動実行も可能
 
 jobs:
@@ -52,9 +53,9 @@ jobs:
           echo "Skipping HTML update for now - just testing Reddit fetch"
           echo "Content fetched successfully!"
       
-      - name: Commit results (optional)
+      - name: Commit results
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
           git add scripts/reddit_content.json || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Fetched Reddit data $(date +'%Y-%m-%d')" && git push) || echo "No changes to commit"
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update: Reddit fetch $(date +'%Y-%m-%d %H:%M UTC')" && git push) || echo "No changes to commit"
