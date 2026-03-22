@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Article Title</title>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+        }
+        
+        .main-content { 
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .article-header {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .article-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .article-meta {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .page-indicator {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .original-post {
+            background: #f9f9f9;
+            padding: 25px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .post-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .post-body {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            white-space: pre-wrap;
+        }
+        
+        .comments-section {
+            margin-top: 30px;
+        }
+        .comments-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .comment {
+            background: #fafafa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 3px solid #e0e0e0;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .comment:hover {
+            background: #f5f5f5;
+            border-left-color: #667eea;
+        }
+        
+        .comment-number {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .comment-body {
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        
+        /* 特大強調コメント */
+        .comment.highlight {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border-left: 5px solid #ff0000;
+            padding: 25px;
+        }
+        .comment.highlight .comment-body {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #cc0000;
+            line-height: 1.6;
+        }
+        
+        .adsense-box {
+            background: #f8f9fa;
+            border: 2px dashed #ccc;
+            padding: 100px 20px;
+            text-align: center;
+            color: #999;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+        }
+        .pagination-btn {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .pagination-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .pagination-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .related-articles {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 3px solid #eee;
+        }
+        .related-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .related-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .related-card:hover {
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        .sidebar-box {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .popular-thread {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .popular-thread:hover {
+            background: #f9f9f9;
+            padding-left: 5px;
+        }
+        
+        @media (max-width: 1024px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .related-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 onclick="location.href='index.html'">🌍 Global Matome</h1>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="article-header">
+                <div class="article-title" id="article-title"></div>
+                <div class="article-meta" id="article-meta"></div>
+            </div>
+            
+            <div class="page-indicator" id="page-indicator"></div>
+            
+            <!-- 元投稿（1ページ目のみ） -->
+            <div class="original-post" id="original-post" style="display:none;">
+                <div class="post-number">1: Original Poster</div>
+                <div class="post-body" id="post-body"></div>
+            </div>
+            
+            <!-- コメントセクション -->
+            <div class="comments-section">
+                <div class="comments-title" id="comments-title"></div>
+                <div id="comments-container"></div>
+            </div>
+            
+            <div class="adsense-box">
+                Google AdSense Ad<br>
+                <small>728x90 Leaderboard</small>
+            </div>
+            
+            <!-- ページネーション -->
+            <div class="pagination">
+                <button class="pagination-btn" id="prev-btn" onclick="changePage(-1)">
+                    ← Previous 50
+                </button>
+                <button class="pagination-btn" id="next-btn" onclick="changePage(1)">
+                    Next 50 →
+                </button>
+            </div>
+            
+            <div class="adsense-box">
+                Google AdSense Ad<br>
+                <small>728x90 Leaderboard</small>
+            </div>
+            
+            <!-- 関連記事（最終ページのみ） -->
+            <div class="related-articles" id="related-section" style="display:none;">
+                <div class="related-title">🔥 Read Next</div>
+                <div class="related-grid" id="related-articles"></div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="sidebar-box">
+                <div class="sidebar-title">📊 Popular Now</div>
+                <div id="popular-threads"></div>
+            </div>
+            
+            <div class="adsense-box" style="padding: 150px 20px;">
+                Google AdSense<br>
+                <small>300x600 Half Page</small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = parseInt(urlParams.get('id')) || 1;
+        let currentPage = parseInt(urlParams.get('page')) || 1;
+        const COMMENTS_PER_PAGE = 50;
+        
+        // デモデータ（後でreddit_content.jsonから読み込む）
+        const articleData = {
+            id: 1,
+            emoji: '🖥️',
+            title: '【Sad News】Redditor bought $2000 PC and it doesn\'t boot lmao',
+            source: 'r/pcmasterrace',
+            upvotes: 12500,
+            totalComments: 247,
+            body: `Spent $2000 on a new gaming PC. Built it myself following YouTube tutorials. 
+
+Everything seemed fine during the build. All cables connected, RGB lights up, fans spinning beautifully.
+
+But when I press the power button... nothing. Screen stays completely black. No BIOS, no Windows logo, nothing.
+
+I've checked:
+- Power cable (yes it's plugged in lol)
+- Monitor cable (tried both HDMI and DisplayPort)
+- RAM seating (pushed until it clicked)
+- GPU seating (it's fully in the slot)
+- CPU power cable (8-pin connected)
+- Motherboard power cable (24-pin connected)
+
+The weird thing is: all the RGB lights work, all fans spin, but zero output to monitor.
+
+I'm freaking out. This was my first build and I saved for 6 months for this. 
+
+Did I just waste $2000? Please help.`,
+            
+            // 本物のコメント（30個）+ AI生成（170個）= 合計200個
+            comments: [
+                // 本物のコメント（Reddit風）
+                { num: 2, text: "Did you plug in the monitor? 💀", highlight: false },
+                { num: 5, text: "Check if RAM is seated properly. Push HARD until it clicks.", highlight: false },
+                { num: 8, text: "lmaooooo", highlight: true },
+                { num: 12, text: "This happened to me. Turned out the HDMI cable was bad. Try a different cable.", highlight: false },
+                { num: 15, text: "Is the monitor input set to the right source?", highlight: false },
+                { num: 18, text: "$2000 and can't even POST 💀💀💀", highlight: true },
+                { num: 23, text: "Try reseating the GPU. Sometimes it looks seated but isn't.", highlight: false },
+                { num: 27, text: "Remove one stick of RAM and try booting with just one.", highlight: false },
+                { num: 31, text: "Check if the CPU power cable is plugged in. It's usually near the CPU socket.", highlight: false },
+                { num: 35, text: "WWWWWWWW", highlight: true },
+                { num: 40, text: "Is your monitor actually turned on?", highlight: false },
+                { num: 45, text: "I had this exact problem. Motherboard was DOA. RMA'd it and new one worked fine.", highlight: false },
+                { num: 50, text: "Did you install the motherboard standoffs? If not you might have shorted it.", highlight: false },
+                { num: 55, text: "Try clearing CMOS. There's usually a button on the motherboard.", highlight: false },
+                { num: 60, text: "First build problems hit different fr fr", highlight: false },
+                { num: 65, text: "$2000 paperweight lol", highlight: true },
+                { num: 70, text: "Check if your PSU switch is turned on (back of the PSU)", highlight: false },
+                { num: 75, text: "What are your specs?", highlight: false },
+                { num: 80, text: "Try removing the GPU and using integrated graphics if your CPU has it", highlight: false },
+                { num: 85, text: "This is why I buy prebuilt 💀", highlight: true },
+                { num: 90, text: "Reseat everything. RAM, GPU, cables. Start from scratch.", highlight: false },
+                { num: 95, text: "Is the CPU cooler mounted properly? Too much pressure can cause issues.", highlight: false },
+                { num: 100, text: "Post a pic of your build, we can help spot issues", highlight: false },
+                { num: 105, text: "Check your motherboard manual for beep codes. That can help diagnose.", highlight: false },
+                { num: 110, text: "Did you remove the plastic film from the CPU cooler?", highlight: false },
+                { num: 115, text: "Try booting with just motherboard, CPU, one RAM stick, PSU. No GPU.", highlight: false },
+                { num: 120, text: "What motherboard and CPU do you have?", highlight: false },
+                { num: 125, text: "Download the motherboard manual PDF and go through the troubleshooting section", highlight: false },
+                { num: 130, text: "Most likely RAM not seated or bad cable. 90% of the time it's one of those.", highlight: false },
+                { num: 135, text: "F in the chat boys", highlight: false },
+                
+                // AI生成コメント（ここに170個追加される想定）
+                // 実際はPythonスクリプトで生成
+                { num: 140, text: "RGB works = PSU is fine. Check RAM next.", highlight: false },
+                { num: 145, text: "Fans spinning but no display = classic RAM issue", highlight: false },
+                { num: 150, text: "Try each RAM stick individually in different slots", highlight: false },
+                { num: 155, text: "www first build struggles are real", highlight: false },
+                { num: 160, text: "Is your HDMI/DP cable plugged into GPU or motherboard?", highlight: false },
+                { num: 165, text: "Make sure you're plugging monitor into GPU not motherboard", highlight: false },
+                { num: 170, text: "$2000 and didn't even POST lmaooo", highlight: true },
+                { num: 175, text: "Check if CPU is installed correctly. Sometimes bent pins.", highlight: false },
+                { num: 180, text: "What PSU wattage? Might be underpowered.", highlight: false },
+                { num: 185, text: "Try a different monitor if you have one", highlight: false },
+                { num: 190, text: "breadboard it outside the case", highlight: false },
+                { num: 195, text: "This is why you test parts before installing in case", highlight: false },
+                { num: 200, text: "OP come back and update us", highlight: false },
+                { num: 205, text: "RemindMe! 1 day", highlight: false },
+                { num: 210, text: "I'm betting on RAM not fully seated", highlight: false },
+                { num: 215, text: "Could be DOA motherboard", highlight: false },
+                { num: 220, text: "Take it to a repair shop if you can't figure it out", highlight: false },
+                { num: 225, text: "Did you update BIOS? Some CPUs need BIOS update to work", highlight: false },
+                { num: 230, text: "Check motherboard LED codes if it has them", highlight: false },
+                { num: 235, text: "www the pain is real", highlight: false },
+                { num: 240, text: "You got this OP, troubleshooting is part of the journey", highlight: false },
+                { num: 245, text: "Post update when you fix it!", highlight: false },
+                { num: 247, text: "Good luck OP 🙏", highlight: false }
+            ]
+        };
+        
+        const totalPages = Math.ceil(articleData.comments.length / COMMENTS_PER_PAGE);
+        
+        function renderPage() {
+            // ヘッダー情報
+            document.getElementById('page-title').textContent = articleData.title;
+            document.getElementById('article-title').textContent = `${articleData.emoji} ${articleData.title}`;
+            document.getElementById('article-meta').textContent = `📍 ${articleData.source} | 👍 ${articleData.upvotes.toLocaleString()} | 💬 ${articleData.totalComments}`;
+            
+            // ページインジケーター
+            document.getElementById('page-indicator').textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            // 1ページ目のみ元投稿を表示
+            if (currentPage === 1) {
+                document.getElementById('original-post').style.display = 'block';
+                document.getElementById('post-body').textContent = articleData.body;
+                document.getElementById('comments-title').textContent = `Comments (${articleData.totalComments} total):`;
+            } else {
+                document.getElementById('original-post').style.display = 'none';
+                document.getElementById('comments-title').textContent = `Comments (continued):`;
+            }
+            
+            // コメント表示
+            const startIdx = (currentPage - 1) * COMMENTS_PER_PAGE;
+            const endIdx = Math.min(startIdx + COMMENTS_PER_PAGE, articleData.comments.length);
+            const pageComments = articleData.comments.slice(startIdx, endIdx);
+            
+            const commentsHTML = pageComments.map(comment => `
+                <div class="comment ${comment.highlight ? 'highlight' : ''}">
+                    <div class="comment-number">${comment.num}: Anonymous</div>
+                    <div class="comment-body">${comment.text}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('comments-container').innerHTML = commentsHTML;
+            
+            // ページネーションボタン
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === totalPages;
+            
+            // 最終ページで関連記事表示
+            if (currentPage === totalPages) {
+                document.getElementById('related-section').style.display = 'block';
+                renderRelatedArticles();
+            } else {
+                document.getElementById('related-section').style.display = 'none';
+            }
+            
+            // ページトップにスクロール
+            window.scrollTo(0, 0);
+            
+            // URL更新
+            const newUrl = `thread.html?id=${articleId}&page=${currentPage}`;
+            window.history.pushState({}, '', newUrl);
+        }
+        
+        function changePage(direction) {
+            currentPage += direction;
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            renderPage();
+        }
+        
+        function renderRelatedArticles() {
+            // 蜘蛛の巣戦略: 関連記事を大量表示
+            const relatedHTML = `
+                <div class="related-card" onclick="location.href='thread.html?id=2'">
+                    <div style="font-size:1.1rem; margin-bottom:8px;">💼 【Help】How to tell boss I quit lol</div>
+                    <div style="color:#999; font-size:0.85rem;">👍 34,200</div>
+                </div>
+                <div class="related-card" onclick="location.href='thread.html?id=3'">
+                    <div style="font-size:1.1rem; margin-bottom:8px;">🎮 【Pic】My gaming setup after 10 years 💀</div>
+                    <div style="color:#999; font-size:0.85rem;">👍 28,900</div>
+                </div>
+                <div class="related-card" onclick="location.href='thread.html?id=4'">
+                    <div style="font-size:1.1rem; margin-bottom:8px;">🍔 【WTF】Restaurant charged me $50 for water lmao</div>
+                    <div style="color:#999; font-size:0.85rem;">👍 45,600</div>
+                </div>
+                <div class="related-card" onclick="location.href='thread.html?id=5'">
+                    <div style="font-size:1.1rem; margin-bottom:8px;">📱 【Sad News】Dropped my phone in toilet fr fr</div>
+                    <div style="color:#999; font-size:0.85rem;">👍 19,800</div>
+                </div>
+            `;
+            document.getElementById('related-articles').innerHTML = relatedHTML;
+        }
+        
+        function renderSidebar() {
+            const popularHTML = `
+                <div class="popular-thread" onclick="location.href='thread.html?id=2'">
+                    <div style="font-size:0.95rem; margin-bottom:5px;">💼 How to tell boss I quit...</div>
+                    <div style="color:#999; font-size:0.8rem;">👍 34,200</div>
+                </div>
+                <div class="popular-thread" onclick="location.href='thread.html?id=3'">
+                    <div style="font-size:0.95rem; margin-bottom:5px;">🎮 Gaming setup after 10 years</div>
+                    <div style="color:#999; font-size:0.8rem;">👍 28,900</div>
+                </div>
+            `;
+            document.getElementById('popular-threads').innerHTML = popularHTML;
+        }
+        
+        renderPage();
+        renderSidebar();
+    </script>
+</body>
+</html>
