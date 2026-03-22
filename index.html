@@ -61,7 +61,6 @@
         .main-content { grid-column: 1; }
         .sidebar { grid-column: 2; }
         
-        /* 記事カード */
         .thread-card {
             background: white;
             border: 2px solid #e0e0e0;
@@ -73,69 +72,32 @@
         .thread-card:hover {
             border-color: #667eea;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
         }
         
-        .thread-header {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
         .thread-title {
             font-size: 1.4rem;
             color: #2c3e50;
             margin-bottom: 10px;
             font-weight: bold;
             cursor: pointer;
+            text-decoration: none;
+            display: block;
         }
-        .thread-title:hover { color: #667eea; }
+        .thread-title:hover { 
+            color: #667eea;
+            text-decoration: underline;
+        }
         .thread-meta {
             color: #666;
             font-size: 0.9rem;
-        }
-        
-        /* コメント抜粋 */
-        .comments-preview {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
-        }
-        .comment {
-            padding: 10px 0;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
             border-bottom: 1px solid #eee;
         }
-        .comment:last-child { border-bottom: none; }
-        .comment-header {
-            color: #666;
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-        }
-        .comment-body {
-            color: #333;
-            margin-left: 10px;
-        }
         
-        .read-more {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: all 0.3s;
-        }
-        .read-more:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-        }
-        
-        /* 関連商品 */
         .related-products {
             margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
         }
         .products-title {
             font-size: 0.9rem;
@@ -149,14 +111,11 @@
             flex-wrap: wrap;
         }
         .product-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
             background: #28a745;
             color: white;
-            text-decoration: none;
             padding: 8px 15px;
             border-radius: 6px;
+            text-decoration: none;
             font-size: 0.85rem;
             transition: all 0.3s;
         }
@@ -165,7 +124,6 @@
             transform: translateY(-2px);
         }
         
-        /* サイドバー */
         .sidebar {
             position: sticky;
             top: 20px;
@@ -194,16 +152,6 @@
             background: #f9f9f9;
             padding-left: 5px;
         }
-        .popular-thread:last-child { border-bottom: none; }
-        .popular-title {
-            color: #2c3e50;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-        }
-        .popular-meta {
-            color: #999;
-            font-size: 0.8rem;
-        }
         
         .adsense-box {
             background: #f8f9fa;
@@ -215,9 +163,7 @@
         }
         
         @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+            .container { grid-template-columns: 1fr; }
             .sidebar { display: none; }
         }
     </style>
@@ -254,7 +200,6 @@
     </div>
 
     <script>
-        // デモデータ（後でReddit APIから自動取得）
         const threadsData = {
             en: [
                 {
@@ -264,11 +209,6 @@
                     source: 'r/pcmasterrace',
                     upvotes: 12500,
                     comments_count: 247,
-                    preview_comments: [
-                        { id: 1, author: 'Anonymous', body: 'Did you plug it in? 💀' },
-                        { id: 5, author: 'PCGuru420', body: 'Check if the RAM is seated properly' },
-                        { id: 12, author: 'BuildHelper', body: 'This happened to me. Turned out the power supply was dead lol' }
-                    ],
                     products: [
                         { icon: '🔧', text: 'PC Diagnostic Tools', url: 'https://amazon.com/s?k=pc+diagnostic+tools&tag=livewellpicks-20' },
                         { icon: '🛠️', text: 'Motherboards 2024', url: 'https://amazon.com/s?k=gaming+motherboard&tag=livewellpicks-20' }
@@ -281,11 +221,6 @@
                     source: 'r/antiwork',
                     upvotes: 34200,
                     comments_count: 892,
-                    preview_comments: [
-                        { id: 1, author: 'WorkerBee', body: 'Just send an email and ghost them 💀' },
-                        { id: 3, author: 'CareerCoach', body: 'Two weeks notice is professional. Don\'t burn bridges' },
-                        { id: 8, author: 'ExEmployee', body: 'I quit via Slack during a meeting lmao' }
-                    ],
                     products: [
                         { icon: '📚', text: 'Career Books', url: 'https://amazon.com/s?k=career+change+books&tag=livewellpicks-20' }
                     ]
@@ -299,28 +234,12 @@
             
             container.innerHTML = threads.map(thread => `
                 <div class="thread-card">
-                    <div class="thread-header">
-                        <div class="thread-title" onclick="goToThread(${thread.id})">
-                            ${thread.emoji} ${thread.title}
-                        </div>
-                        <div class="thread-meta">
-                            📍 ${thread.source} | 👍 ${thread.upvotes.toLocaleString()} | 💬 ${thread.comments_count}
-                        </div>
-                    </div>
-                    
-                    <div class="comments-preview">
-                        ${thread.preview_comments.map((comment, idx) => `
-                            <div class="comment">
-                                <div class="comment-header">${idx + 1}: ${comment.author}</div>
-                                <div class="comment-body">${comment.body}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    <a href="thread-${thread.id}.html" class="read-more">
-                        Read all ${thread.comments_count} comments →
+                    <a href="thread.html?id=${thread.id}" class="thread-title">
+                        ${thread.emoji} ${thread.title}
                     </a>
-                    
+                    <div class="thread-meta">
+                        📍 ${thread.source} | 👍 ${thread.upvotes.toLocaleString()} | 💬 ${thread.comments_count}
+                    </div>
                     <div class="related-products">
                         <div class="products-title">💡 Related:</div>
                         <div class="product-links">
@@ -342,15 +261,15 @@
             const popular = threads.slice(0, 5);
             
             container.innerHTML = popular.map(thread => `
-                <div class="popular-thread" onclick="goToThread(${thread.id})">
-                    <div class="popular-title">${thread.emoji} ${thread.title.substring(0, 60)}...</div>
-                    <div class="popular-meta">👍 ${thread.upvotes.toLocaleString()}</div>
+                <div class="popular-thread" onclick="location.href='thread.html?id=${thread.id}'">
+                    <div style="color:#2c3e50; font-size:0.95rem; margin-bottom:5px;">
+                        ${thread.emoji} ${thread.title.substring(0, 60)}...
+                    </div>
+                    <div style="color:#999; font-size:0.8rem;">
+                        👍 ${thread.upvotes.toLocaleString()}
+                    </div>
                 </div>
             `).join('');
-        }
-
-        function goToThread(id) {
-            window.location.href = `thread.html?id=${id}`;
         }
 
         document.querySelectorAll('.tab').forEach(tab => {
