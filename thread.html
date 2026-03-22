@@ -268,10 +268,10 @@
             <!-- ページネーション -->
             <div class="pagination">
                 <button class="pagination-btn" id="prev-btn" onclick="changePage(-1)">
-                    ← Previous 50
+                    ← Previous 100
                 </button>
                 <button class="pagination-btn" id="next-btn" onclick="changePage(1)">
-                    Next 50 →
+                    Next 100 →
                 </button>
             </div>
             
@@ -304,7 +304,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const articleId = parseInt(urlParams.get('id')) || 1;
         let currentPage = parseInt(urlParams.get('page')) || 1;
-        const COMMENTS_PER_PAGE = 50;
+        const COMMENTS_PER_PAGE = 100;
         
         // デモデータ（後でreddit_content.jsonから読み込む）
         const articleData = {
@@ -435,10 +435,36 @@ Did I just waste $2000? Please help.`,
             document.getElementById('prev-btn').disabled = currentPage === 1;
             document.getElementById('next-btn').disabled = currentPage === totalPages;
             
-            // 最終ページで関連記事表示
+            // 最終ページの処理
             if (currentPage === totalPages) {
-                document.getElementById('related-section').style.display = 'block';
-                renderRelatedArticles();
+                // 50%の確率で蜘蛛の巣 or トップページへ
+                const showSpider = Math.random() < 0.5;
+                
+                if (showSpider) {
+                    // 蜘蛛の巣戦略
+                    document.getElementById('related-section').style.display = 'block';
+                    renderRelatedArticles();
+                } else {
+                    // トップページへ誘導
+                    document.getElementById('related-section').innerHTML = `
+                        <div style="text-align:center; padding:40px;">
+                            <a href="index.html" style="display:inline-block; background:#667eea; color:white; padding:20px 40px; border-radius:8px; text-decoration:none; font-size:1.2rem; font-weight:bold;">
+                                🏠 Back to Top Page
+                            </a>
+                        </div>
+                    `;
+                    document.getElementById('related-section').style.display = 'block';
+                }
+                
+                // Reddit元リンクを追加
+                const originalLinkHTML = `
+                    <div style="margin-top:50px; padding-top:30px; border-top:2px solid #eee; text-align:center;">
+                        <a href="${articleData.url || 'https://reddit.com'}" target="_blank" rel="noopener" style="color:#999; font-size:0.9rem; text-decoration:none;">
+                            📚 Original thread on Reddit
+                        </a>
+                    </div>
+                `;
+                document.getElementById('related-section').insertAdjacentHTML('afterend', originalLinkHTML);
             } else {
                 document.getElementById('related-section').style.display = 'none';
             }
