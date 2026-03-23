@@ -268,10 +268,10 @@
             <!-- ページネーション -->
             <div class="pagination">
                 <button class="pagination-btn" id="prev-btn" onclick="changePage(-1)">
-                    ← Previous 100
+                    ← Previous 30
                 </button>
                 <button class="pagination-btn" id="next-btn" onclick="changePage(1)">
-                    Next 100 →
+                    Next 30 →
                 </button>
             </div>
             
@@ -284,6 +284,13 @@
             <div class="related-articles" id="related-section" style="display:none;">
                 <div class="related-title">🔥 Read Next</div>
                 <div class="related-grid" id="related-articles"></div>
+            </div>
+            
+            <!-- Reddit元リンク（最終ページのみ、小さく） -->
+            <div id="original-link-section" style="display:none; text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid #eee;">
+                <a href="#" id="reddit-original-link" target="_blank" style="color:#999; font-size:0.85rem; text-decoration:none;">
+                    💬 Continue on Reddit →
+                </a>
             </div>
         </div>
         
@@ -304,7 +311,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const articleId = parseInt(urlParams.get('id')) || 1;
         let currentPage = parseInt(urlParams.get('page')) || 1;
-        const COMMENTS_PER_PAGE = 100;
+        const COMMENTS_PER_PAGE = 30;
         
         // デモデータ（後でreddit_content.jsonから読み込む）
         const articleData = {
@@ -437,36 +444,31 @@ Did I just waste $2000? Please help.`,
             
             // 最終ページの処理
             if (currentPage === totalPages) {
-                // 50%の確率で蜘蛛の巣 or トップページへ
-                const showSpider = Math.random() < 0.5;
+                // 90%の確率で関連記事、10%でトップに戻る
+                const showRelated = Math.random() < 0.9;
                 
-                if (showSpider) {
-                    // 蜘蛛の巣戦略
+                if (showRelated) {
+                    // 90%: 関連記事表示（蜘蛛の巣）
                     document.getElementById('related-section').style.display = 'block';
                     renderRelatedArticles();
                 } else {
-                    // トップページへ誘導
+                    // 10%: トップページへ戻る（2度手間）
                     document.getElementById('related-section').innerHTML = `
                         <div style="text-align:center; padding:40px;">
                             <a href="index.html" style="display:inline-block; background:#667eea; color:white; padding:20px 40px; border-radius:8px; text-decoration:none; font-size:1.2rem; font-weight:bold;">
-                                🏠 Back to Top Page
+                                🏠 Back to Top
                             </a>
                         </div>
                     `;
                     document.getElementById('related-section').style.display = 'block';
                 }
                 
-                // Reddit元リンクを追加
-                const originalLinkHTML = `
-                    <div style="margin-top:50px; padding-top:30px; border-top:2px solid #eee; text-align:center;">
-                        <a href="${articleData.url || 'https://reddit.com'}" target="_blank" rel="noopener" style="color:#999; font-size:0.9rem; text-decoration:none;">
-                            📚 Original thread on Reddit
-                        </a>
-                    </div>
-                `;
-                document.getElementById('related-section').insertAdjacentHTML('afterend', originalLinkHTML);
+                // Reddit元リンクを表示
+                document.getElementById('original-link-section').style.display = 'block';
+                document.getElementById('reddit-original-link').href = articleData.url || 'https://reddit.com';
             } else {
                 document.getElementById('related-section').style.display = 'none';
+                document.getElementById('original-link-section').style.display = 'none';
             }
             
             // ページトップにスクロール
