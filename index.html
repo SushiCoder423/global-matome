@@ -5,414 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌍 Global Matome - World Discussion Boards Digest</title>
     <meta name="description" content="Daily digest from Reddit, PTT, Forocoches, Hardmob and more!">
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .language-tabs {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .tab {
-            background: #f0f0f0;
-            border: 2px solid #ddd;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .language-tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 20px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .tab { background: #f0f0f0; border: 2px solid #ddd; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
         .tab:hover { background: #e0e0e0; }
         .tab.active { background: #667eea; color: white; border-color: #667eea; }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 20px;
-        }
-        
-        .main-content { grid-column: 1; }
-        .sidebar { grid-column: 2; }
-        
-        .thread-card {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-        .thread-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .thread-title {
-            font-size: 1.4rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-        }
-        .thread-title:hover { 
-            color: #667eea;
-            text-decoration: underline;
-        }
-        .thread-meta {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .related-products {
-            margin-top: 15px;
-        }
-        .products-title {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .product-links {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .product-link {
-            background: #28a745;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-        .product-link:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-        
-        .sidebar {
-            position: sticky;
-            top: 20px;
-            height: fit-content;
-        }
-        .sidebar-box {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .sidebar-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        .popular-thread {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .popular-thread:hover {
-            background: #f9f9f9;
-            padding-left: 5px;
-        }
-        
-        .adsense-box {
-            background: #f8f9fa;
-            border: 2px dashed #ccc;
-            padding: 100px 20px;
-            text-align: center;
-            color: #999;
-            border-radius: 8px;
-        }
-        
-        @media (max-width: 1024px) {
-            .container { grid-template-columns: 1fr; }
-            .sidebar { display: none; }
-        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+        .thread-card { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; transition: all 0.3s; }
+        .thread-card:hover { border-color: #667eea; box-shadow: 0 4px 12px rgba(102,126,234,0.15); transform: translateY(-2px); }
+        .thread-title { font-size: 1.4rem; color: #2c3e50; margin-bottom: 10px; font-weight: bold; cursor: pointer; text-decoration: none; display: block; }
+        .thread-title:hover { color: #667eea; text-decoration: underline; }
+        .thread-meta { color: #666; font-size: 0.9rem; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .related-products { margin-top: 15px; }
+        .products-title { font-size: 0.9rem; color: #666; margin-bottom: 10px; font-weight: bold; }
+        .product-links { display: flex; gap: 10px; flex-wrap: wrap; }
+        .product-link { background: #28a745; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; transition: all 0.3s; }
+        .product-link:hover { background: #218838; transform: translateY(-2px); }
+        .sidebar { position: sticky; top: 20px; height: fit-content; }
+        .sidebar-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .sidebar-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: #2c3e50; }
+        .popular-thread { padding: 10px 0; border-bottom: 1px solid #eee; cursor: pointer; transition: all 0.3s; }
+        .popular-thread:hover { background: #f9f9f9; padding-left: 5px; }
+        .adsense-box { background: #f8f9fa; border: 2px dashed #ccc; padding: 100px 20px; text-align: center; color: #999; border-radius: 8px; }
+        @media (max-width: 1024px) { .container { grid-template-columns: 1fr; } .sidebar { display: none; } }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1 id="site-title">🌍 Global Matome</h1>
-        <p class="tagline" id="site-tagline">Daily viral posts from discussion boards worldwide!</p>
+        <h1>🌍 Global Matome</h1>
+        <p>Daily viral posts from discussion boards worldwide!</p>
     </div>
-
     <div class="language-tabs">
-        <div class="tab active" data-lang="en">🇺🇸 English</div>
+        <div class="tab" data-lang="en">🇺🇸 English</div>
         <div class="tab" data-lang="es">🇪🇸 Español</div>
         <div class="tab" data-lang="pt">🇧🇷 Português</div>
         <div class="tab" data-lang="fr">🇫🇷 Français</div>
         <div class="tab" data-lang="zh-tw">🇹🇼 繁體中文</div>
         <div class="tab" data-lang="zh-cn">🇨🇳 简体中文</div>
     </div>
-
     <div class="container">
         <div class="main-content" id="main-content"></div>
-        
         <div class="sidebar">
             <div class="sidebar-box">
                 <div class="sidebar-title">🔥 Popular Now</div>
                 <div id="popular-threads"></div>
             </div>
-            
-            <div class="adsense-box">
-                Google AdSense<br>
-                <small>Sidebar Ad</small>
-            </div>
+            <div class="adsense-box">Google AdSense<br><small>Sidebar Ad</small></div>
         </div>
     </div>
+<script>
+const threadsData = {
+    en: [
+        { id:1, emoji:'🖥️', title:'【Sad News】Redditor spent $2000 on a PC build and it won\'t boot lmao 💀', source:'r/pcmasterrace', upvotes:12500, comments_count:247, products:[{icon:'🔧',text:'PC Diagnostic Tools',url:'https://amazon.com/s?k=pc+diagnostic+tools&tag=livewellpicks-20'},{icon:'🛠️',text:'Motherboards',url:'https://amazon.com/s?k=gaming+motherboard&tag=livewellpicks-20'},{icon:'📦',text:'eBay PC Parts',url:'https://www.ebay.com/sch/i.html?_nkw=pc+parts'}]},
+        { id:2, emoji:'💼', title:'【Breaking】Guy quits live on Zoom in front of 50 people and everyone starts clapping lol', source:'r/antiwork', upvotes:34200, comments_count:892, products:[{icon:'📚',text:'Career Books',url:'https://amazon.com/s?k=career+change+books&tag=livewellpicks-20'},{icon:'💻',text:'Home Office Setup',url:'https://amazon.com/s?k=home+office&tag=livewellpicks-20'}]},
+        { id:3, emoji:'🍕', title:'【Help】I ordered pizza and the driver ate half of it and just shrugged lmao', source:'r/tifu', upvotes:22100, comments_count:641, products:[{icon:'🍕',text:'Pizza Maker',url:'https://amazon.com/s?k=pizza+maker&tag=livewellpicks-20'},{icon:'📦',text:'Insulated Delivery Bag',url:'https://www.ebay.com/sch/i.html?_nkw=insulated+delivery+bag'}]},
+        { id:4, emoji:'🐶', title:'【Breaking】Dog destroys $500 sofa and poses proudly next to the wreckage 💀', source:'r/aww', upvotes:67300, comments_count:1203, products:[{icon:'🐶',text:'Dog Chew Toys',url:'https://amazon.com/s?k=dog+chew+toys&tag=livewellpicks-20'},{icon:'🛋️',text:'Pet-Proof Sofa Cover',url:'https://www.ebay.com/sch/i.html?_nkw=sofa+pet+cover'}]},
+        { id:5, emoji:'💸', title:'【Investing】Guy turns $300 into $47 after "reading the market" for a week lmao', source:'r/wallstreetbets', upvotes:45000, comments_count:2341, products:[{icon:'📈',text:'Investing for Beginners',url:'https://amazon.com/s?k=stock+investing+beginners&tag=livewellpicks-20'},{icon:'💰',text:'Budget Planner',url:'https://www.ebay.com/sch/i.html?_nkw=budget+planner'}]},
+        { id:6, emoji:'🏠', title:'【Help】Landlord raised rent 60% overnight, entire building organizing a strike lol', source:'r/renting', upvotes:31200, comments_count:987, products:[{icon:'📚',text:'Tenant Rights Guide',url:'https://amazon.com/s?k=tenant+rights+book&tag=livewellpicks-20'},{icon:'🏠',text:'Moving Supplies',url:'https://www.aliexpress.com/w/wholesale-moving-supplies.html'}]}
+    ],
+    es: [
+        { id:101, emoji:'⚽', title:'【Tragedia】Mi equipo perdió en el último minuto por un autogol jajajaja nos tienen manía', source:'Forocoches', upvotes:8900, comments_count:456, products:[{icon:'⚽',text:'Camisetas de Fútbol',url:'https://www.aliexpress.com/w/wholesale-soccer-jersey.html'},{icon:'📺',text:'Smart TV para ver el partido',url:'https://www.aliexpress.com/w/wholesale-smart-tv.html'}]},
+        { id:102, emoji:'🚗', title:'【Ayuda】Compré un coche de segunda mano y se averió dentro del concesionario xD', source:'Menéame', upvotes:15600, comments_count:723, products:[{icon:'🔧',text:'Herramientas Auto',url:'https://www.aliexpress.com/w/wholesale-car-tools.html'},{icon:'🚗',text:'Accesorios Coche',url:'https://www.ebay.com/sch/i.html?_nkw=car+accessories'}]},
+        { id:103, emoji:'🍺', title:'【Historia】Fui a una cita y el tío me cobró la mitad exacta de la cuenta jajaja no habrá segunda', source:'Forocoches', upvotes:29400, comments_count:1187, products:[{icon:'🍷',text:'Copas de Vino',url:'https://www.aliexpress.com/w/wholesale-wine-glasses.html'},{icon:'💄',text:'Kit cita perfecta',url:'https://www.ebay.com/sch/i.html?_nkw=date+night+kit'}]},
+        { id:104, emoji:'😂', title:'【Fail】Le dije a mi jefe lo que pensaba de él en la cena de empresa xD no volveré el lunes', source:'Taringa!', upvotes:41000, comments_count:2034, products:[{icon:'📚',text:'Cómo buscar trabajo',url:'https://www.aliexpress.com/w/wholesale-career-book.html'},{icon:'💼',text:'Maletín profesional',url:'https://www.ebay.com/sch/i.html?_nkw=professional+briefcase'}]},
+        { id:105, emoji:'📱', title:'【Triste】Se me cayó el móvil nuevo al váter nada más sacarlo de la caja xD la vida', source:'Forocoches', upvotes:18700, comments_count:832, products:[{icon:'📱',text:'Fundas resistentes al agua',url:'https://www.aliexpress.com/w/wholesale-waterproof-phone-case.html'},{icon:'🔧',text:'Kit reparación pantalla',url:'https://www.aliexpress.com/w/wholesale-phone-repair.html'}]},
+        { id:106, emoji:'🐱', title:'【Noticia】Mi gato aprendió a abrir el frigorífico y comió todo lo que había jajajaja', source:'Menéame', upvotes:52000, comments_count:2198, products:[{icon:'🐱',text:'Snacks para gatos',url:'https://www.aliexpress.com/w/wholesale-cat-treats.html'},{icon:'🔒',text:'Cierre para nevera',url:'https://www.ebay.com/sch/i.html?_nkw=fridge+lock'}]}
+    ],
+    pt: [
+        { id:201, emoji:'🎮', title:'【Triste】Comprei PS5 por 5 mil reais e chegou um tijolo dentro da caixa kkkkkk', source:'Hardmob', upvotes:19800, comments_count:834, products:[{icon:'🎮',text:'Controles PS5',url:'https://www.aliexpress.com/w/wholesale-ps5-controller.html'},{icon:'🕹️',text:'Games baratos',url:'https://www.ebay.com/sch/i.html?_nkw=ps5+games'}]},
+        { id:202, emoji:'📱', title:'【Fail】Caiu meu celular novinho no vaso no primeiro dia rsrsrs Deus me odeia mesmo', source:'Reddit Brasil', upvotes:12300, comments_count:567, products:[{icon:'📱',text:'Capas à prova d\'água',url:'https://www.aliexpress.com/w/wholesale-waterproof-phone-case.html'},{icon:'🔧',text:'Kit reparo celular',url:'https://www.aliexpress.com/w/wholesale-phone-repair.html'}]},
+        { id:203, emoji:'🏠', title:'【Revolta】Proprietário aumentou aluguel 80%, inquilinos do prédio inteiro se uniram kkkkkk', source:'Fórum Outer Space', upvotes:33500, comments_count:1456, products:[{icon:'🏠',text:'Kit mudança',url:'https://www.aliexpress.com/w/wholesale-moving-box.html'},{icon:'📚',text:'Direitos do inquilino',url:'https://www.amazon.com.br/s?k=direitos+inquilino'}]},
+        { id:204, emoji:'🍔', title:'【Urgente】Fiz dieta 3 meses, meu amigo me levou no rodízio de pizza na comemoração kkkkk acabou', source:'Reddit Brasil', upvotes:28100, comments_count:992, products:[{icon:'💪',text:'Suplementos fitness',url:'https://www.aliexpress.com/w/wholesale-protein-powder.html'},{icon:'🏃',text:'Tênis de corrida',url:'https://www.ebay.com/sch/i.html?_nkw=running+shoes'}]},
+        { id:205, emoji:'💸', title:'【Investimento】Coloquei tudo na bolsa seguindo conselho do primo e perdi 70% rsrsrs', source:'Clube do Hardware', upvotes:41200, comments_count:2311, products:[{icon:'📈',text:'Livros de investimento',url:'https://www.amazon.com.br/s?k=investimento+iniciante'},{icon:'💰',text:'Planejador financeiro',url:'https://www.aliexpress.com/w/wholesale-budget-planner.html'}]},
+        { id:206, emoji:'🐱', title:'【Inacreditável】Gato aprendeu a abrir a geladeira, dono chegou em casa e não sobrou nada kkkkkk', source:'Hardmob', upvotes:57800, comments_count:3012, products:[{icon:'🐱',text:'Petiscos para gatos',url:'https://www.aliexpress.com/w/wholesale-cat-treats.html'},{icon:'🔒',text:'Trava para geladeira',url:'https://www.aliexpress.com/w/wholesale-fridge-lock.html'}]}
+    ],
+    fr: [
+        { id:301, emoji:'🍷', title:'【Drame】J\'ai renversé une bouteille de Bordeaux à 300€ sur le canapé blanc mdr', source:'JeuxVideo.com 18-25', upvotes:23400, comments_count:991, products:[{icon:'🍷',text:'Carafe à décanter',url:'https://www.aliexpress.com/w/wholesale-wine-decanter.html'},{icon:'🍾',text:'Verres à Vin',url:'https://www.ebay.com/sch/i.html?_nkw=wine+glasses'}]},
+        { id:302, emoji:'🏠', title:'【Scandale】Mon proprio augmente le loyer de 50%, tout l\'immeuble se rebelle ptdr', source:'Reddit France', upvotes:31200, comments_count:1245, products:[{icon:'📚',text:'Guide droit locatif',url:'https://www.amazon.fr/s?k=droit+locatif+guide'},{icon:'🏠',text:'Matériel déménagement',url:'https://www.aliexpress.com/w/wholesale-moving-supplies.html'}]},
+        { id:303, emoji:'😅', title:'【Fail】J\'ai confondu la réunion Zoom pro avec mon psy et mon chef a tout entendu mdr', source:'Reddit France', upvotes:54300, comments_count:2108, products:[{icon:'🎧',text:'Casque antibruit',url:'https://www.aliexpress.com/w/wholesale-noise-cancelling-headphone.html'},{icon:'💻',text:'Webcam HD',url:'https://www.ebay.com/sch/i.html?_nkw=webcam+hd'}]},
+        { id:304, emoji:'🚗', title:'【Galère】J\'ai passé le permis 7 fois, enfin réussi, les moniteurs ont applaudi ptdr', source:'JeuxVideo.com 18-25', upvotes:39700, comments_count:1876, products:[{icon:'🚗',text:'Manuel Code de la Route',url:'https://www.amazon.fr/s?k=code+de+la+route+2024'},{icon:'🛻',text:'Accessoires voiture',url:'https://www.aliexpress.com/w/wholesale-car-accessories.html'}]},
+        { id:305, emoji:'🐱', title:'【Urgent】Mon chat a effacé 3 ans de thèse en marchant sur le clavier mdr je pleure', source:'Reddit France', upvotes:68900, comments_count:3012, products:[{icon:'💾',text:'Disque dur externe',url:'https://www.aliexpress.com/w/wholesale-external-hard-drive.html'},{icon:'🐱',text:'Couvre-clavier anti-chat',url:'https://www.ebay.com/sch/i.html?_nkw=keyboard+cover'}]},
+        { id:306, emoji:'💸', title:'【Chronique】J\'ai tout mis en bourse sur un tuyau du beau-frère, j\'ai perdu 80% ptdr', source:'Reddit France', upvotes:44100, comments_count:2203, products:[{icon:'📈',text:'Livres investissement débutant',url:'https://www.amazon.fr/s?k=investissement+bourse+débutant'},{icon:'💰',text:'Budget Planner',url:'https://www.aliexpress.com/w/wholesale-budget-planner.html'}]}
+    ],
+    'zh-tw': [
+        { id:401, emoji:'🍜', title:'【悲報】買的泡麵裡面沒有調味包 廠商說要自己打電話申請補寄 笑死人', source:'PTT', upvotes:28900, comments_count:876, products:[{icon:'🍜',text:'泡麵組合',url:'https://www.aliexpress.com/w/wholesale-instant-noodles.html'},{icon:'🥢',text:'廚房用品',url:'https://shopee.tw/search?keyword=kitchen'}]},
+        { id:402, emoji:'📱', title:'【求助】iPhone摔破螢幕了 維修要價一萬五 哭了wwwww 要不要直接換新的', source:'Dcard', upvotes:15600, comments_count:534, products:[{icon:'📱',text:'iPhone保護殼',url:'https://shopee.tw/search?keyword=iphone+case'},{icon:'🔧',text:'螢幕維修工具',url:'https://www.aliexpress.com/w/wholesale-screen-repair.html'}]},
+        { id:403, emoji:'🏠', title:'【崩潰】房東突然說要漲租金三成 整棟住戶開會決定集體不繳 笑死wwwww', source:'PTT', upvotes:42100, comments_count:1832, products:[{icon:'🏠',text:'搬家紙箱',url:'https://shopee.tw/search?keyword=moving+box'},{icon:'📚',text:'租屋法律指南',url:'https://shopee.tw/search?keyword=rental+law'}]},
+        { id:404, emoji:'💸', title:'【慘了】聽親戚話把存款全押台積電 結果買在最高點wwwww 等解套要等幾年', source:'Dcard', upvotes:37600, comments_count:2210, products:[{icon:'📈',text:'投資理財書籍',url:'https://shopee.tw/search?keyword=investment+book'},{icon:'💰',text:'記帳本',url:'https://shopee.tw/search?keyword=budget+planner'}]},
+        { id:405, emoji:'🐱', title:'【神奇】貓咪自己學會開冰箱拿東西吃 主人回家食物全部消失了 笑死wwwww', source:'PTT', upvotes:61300, comments_count:2891, products:[{icon:'🐱',text:'貓咪零食',url:'https://shopee.tw/search?keyword=cat+treats'},{icon:'🔒',text:'冰箱防開鎖',url:'https://shopee.tw/search?keyword=fridge+lock'}]},
+        { id:406, emoji:'🎓', title:'【悲劇】論文被教授退回第七次 要求全部重寫 wwwww畢業遙遙無期了', source:'Dcard', upvotes:22400, comments_count:1103, products:[{icon:'📝',text:'論文寫作指導書',url:'https://shopee.tw/search?keyword=thesis+writing'},{icon:'☕',text:'咖啡機（熬夜必備）',url:'https://shopee.tw/search?keyword=coffee+maker'}]}
+    ],
+    'zh-cn': [
+        { id:501, emoji:'🍜', title:'【悲报】买的泡面里没有调味包 客服让发邮件申请 哈哈哈哈笑死了', source:'PTT（简体版）', upvotes:28900, comments_count:876, products:[{icon:'🍜',text:'方便面组合',url:'https://www.aliexpress.com/w/wholesale-instant-noodles.html'},{icon:'🥢',text:'厨房用品',url:'https://www.aliexpress.com/w/wholesale-kitchen.html'}]},
+        { id:502, emoji:'📱', title:'【求助】iPhone摔破屏幕 维修报价8000块 哈哈哈哈我哭了要不要直接换新的', source:'Dcard（简体版）', upvotes:15600, comments_count:534, products:[{icon:'📱',text:'iPhone保护壳',url:'https://www.aliexpress.com/w/wholesale-iphone-case.html'},{icon:'🔧',text:'屏幕维修工具',url:'https://www.aliexpress.com/w/wholesale-screen-repair.html'}]},
+        { id:503, emoji:'🏠', title:'【崩溃】房东要涨租金40% 全楼住户联合起来罢租了 哈哈哈哈太解气了', source:'PTT（简体版）', upvotes:42100, comments_count:1832, products:[{icon:'🏠',text:'搬家纸箱',url:'https://www.aliexpress.com/w/wholesale-moving-box.html'},{icon:'📚',text:'租房法律指南',url:'https://www.aliexpress.com/w/wholesale-rental-law.html'}]},
+        { id:504, emoji:'💸', title:'【惨了】把积蓄全押在亲戚推荐的股票上 亏了70% 哈哈哈哈活该我自己', source:'Dcard（简体版）', upvotes:37600, comments_count:2210, products:[{icon:'📈',text:'投资理财书籍',url:'https://www.aliexpress.com/w/wholesale-investment-book.html'},{icon:'💰',text:'记账本',url:'https://www.aliexpress.com/w/wholesale-budget-planner.html'}]},
+        { id:505, emoji:'🐱', title:'【神奇】猫咪学会开冰箱 主人出门三小时回来食物全没了 哈哈哈哈太绝了', source:'PTT（简体版）', upvotes:61300, comments_count:2891, products:[{icon:'🐱',text:'猫咪零食',url:'https://www.aliexpress.com/w/wholesale-cat-treats.html'},{icon:'🔒',text:'冰箱防开锁',url:'https://www.aliexpress.com/w/wholesale-fridge-lock.html'}]},
+        { id:506, emoji:'🎓', title:'【悲剧】论文被导师退回第八次说全部重写 哈哈哈哈我快毕不了业了', source:'Dcard（简体版）', upvotes:22400, comments_count:1103, products:[{icon:'📝',text:'论文写作指导书',url:'https://www.aliexpress.com/w/wholesale-study-book.html'},{icon:'☕',text:'咖啡机（熬夜必备）',url:'https://www.aliexpress.com/w/wholesale-coffee-maker.html'}]}
+    ]
+};
 
-    <script>
-        const threadsData = {
-            en: [
-                {
-                    id: 1,
-                    emoji: '🖥️',
-                    title: '【Sad News】Redditor bought $2000 PC and it doesn\'t boot lmao',
-                    source: 'r/pcmasterrace',
-                    upvotes: 12500,
-                    comments_count: 247,
-                    products: [
-                        { icon: '🔧', text: 'PC Diagnostic Tools', url: 'https://amazon.com/s?k=pc+diagnostic+tools&tag=livewellpicks-20' },
-                        { icon: '🛠️', text: 'Motherboards', url: 'https://amazon.com/s?k=gaming+motherboard&tag=livewellpicks-20' },
-                        { icon: '📦', text: 'eBay PC Parts', url: 'https://www.ebay.com/sch/i.html?_nkw=pc+parts' }
-                    ]
-                },
-                {
-                    id: 2,
-                    emoji: '💼',
-                    title: '【Help】How to tell my boss I quit lol',
-                    source: 'r/antiwork',
-                    upvotes: 34200,
-                    comments_count: 892,
-                    products: [
-                        { icon: '📚', text: 'Career Books', url: 'https://amazon.com/s?k=career+change+books&tag=livewellpicks-20' },
-                        { icon: '💻', text: 'Work From Home Setup', url: 'https://amazon.com/s?k=home+office&tag=livewellpicks-20' }
-                    ]
-                }
-            ],
-            es: [
-                {
-                    id: 3,
-                    emoji: '⚽',
-                    title: '【Triste】Mi equipo perdió en el último minuto jajaja',
-                    source: 'Forocoches',
-                    upvotes: 8900,
-                    comments_count: 456,
-                    products: [
-                        { icon: '⚽', text: 'Camisetas de Fútbol', url: 'https://www.aliexpress.com/w/wholesale-soccer-jersey.html' },
-                        { icon: '📺', text: 'Smart TV', url: 'https://www.aliexpress.com/w/wholesale-smart-tv.html' }
-                    ]
-                },
-                {
-                    id: 4,
-                    emoji: '🚗',
-                    title: '【Ayuda】Compré un coche usado y ya se averió xD',
-                    source: 'Menéame',
-                    upvotes: 15600,
-                    comments_count: 723,
-                    products: [
-                        { icon: '🔧', text: 'Herramientas Auto', url: 'https://www.aliexpress.com/w/wholesale-car-tools.html' },
-                        { icon: '🚗', text: 'Accesorios Coche', url: 'https://www.ebay.com/sch/i.html?_nkw=car+accessories' }
-                    ]
-                }
-            ],
-            pt: [
-                {
-                    id: 5,
-                    emoji: '🎮',
-                    title: '【Triste】Comprei PS5 e chegou tijolo kkkkkk',
-                    source: 'Hardmob',
-                    upvotes: 19800,
-                    comments_count: 834,
-                    products: [
-                        { icon: '🎮', text: 'Controles PS5', url: 'https://www.aliexpress.com/w/wholesale-ps5-controller.html' },
-                        { icon: '🕹️', text: 'Games', url: 'https://www.ebay.com/sch/i.html?_nkw=ps5+games' }
-                    ]
-                },
-                {
-                    id: 6,
-                    emoji: '📱',
-                    title: '【Fail】Caiu meu celular no vaso rsrsrs',
-                    source: 'Reddit Brasil',
-                    upvotes: 12300,
-                    comments_count: 567,
-                    products: [
-                        { icon: '📱', text: 'Capas Celular', url: 'https://www.aliexpress.com/w/wholesale-phone-case.html' },
-                        { icon: '🔧', text: 'Kit Reparo', url: 'https://www.aliexpress.com/w/wholesale-phone-repair.html' }
-                    ]
-                }
-            ],
-            fr: [
-                {
-                    id: 7,
-                    emoji: '🍷',
-                    title: '【Triste】J\'ai cassé ma bouteille de vin à 200€ mdr',
-                    source: 'JeuxVideo.com 18-25',
-                    upvotes: 23400,
-                    comments_count: 991,
-                    products: [
-                        { icon: '🍷', text: 'Accessoires Vin', url: 'https://www.aliexpress.com/w/wholesale-wine-accessories.html' },
-                        { icon: '🍾', text: 'Verres à Vin', url: 'https://www.ebay.com/sch/i.html?_nkw=wine+glasses' }
-                    ]
-                },
-                {
-                    id: 8,
-                    emoji: '🏠',
-                    title: '【Aide】Mon proprio veut augmenter le loyer de 40% ptdr',
-                    source: 'Reddit France',
-                    upvotes: 31200,
-                    comments_count: 1245,
-                    products: [
-                        { icon: '📚', text: 'Livres Droit Locatif', url: 'https://www.amazon.fr/s?k=droit+locatif' },
-                        { icon: '🏠', text: 'Déménagement', url: 'https://www.aliexpress.com/w/wholesale-moving-supplies.html' }
-                    ]
-                }
-            ],
-            'zh-tw': [
-                {
-                    id: 9,
-                    emoji: '🍜',
-                    title: '【悲報】買的泡麵裡面沒有調味包 笑死',
-                    source: 'PTT',
-                    upvotes: 28900,
-                    comments_count: 876,
-                    products: [
-                        { icon: '🍜', text: '泡麵組合', url: 'https://www.aliexpress.com/w/wholesale-instant-noodles.html' },
-                        { icon: '🥢', text: '廚房用品', url: 'https://shopee.tw/search?keyword=kitchen' }
-                    ]
-                },
-                {
-                    id: 10,
-                    emoji: '📱',
-                    title: '【幫助】iPhone摔破螢幕了wwwww',
-                    source: 'Dcard',
-                    upvotes: 15600,
-                    comments_count: 534,
-                    products: [
-                        { icon: '📱', text: 'iPhone保護殼', url: 'https://shopee.tw/search?keyword=iphone+case' },
-                        { icon: '🔧', text: '螢幕維修工具', url: 'https://www.aliexpress.com/w/wholesale-screen-repair.html' }
-                    ]
-                }
-            ],
-            'zh-cn': [
-                {
-                    id: 11,
-                    emoji: '🍜',
-                    title: '【悲报】买的泡面里面没有调味包 笑死',
-                    source: 'PTT（简体版）',
-                    upvotes: 28900,
-                    comments_count: 876,
-                    products: [
-                        { icon: '🍜', text: '方便面组合', url: 'https://www.aliexpress.com/w/wholesale-instant-noodles.html' },
-                        { icon: '🥢', text: '厨房用品', url: 'https://www.aliexpress.com/w/wholesale-kitchen.html' }
-                    ]
-                },
-                {
-                    id: 12,
-                    emoji: '📱',
-                    title: '【帮助】iPhone摔破屏幕了 哈哈哈哈',
-                    source: 'Dcard（简体版）',
-                    upvotes: 15600,
-                    comments_count: 534,
-                    products: [
-                        { icon: '📱', text: 'iPhone保护壳', url: 'https://www.aliexpress.com/w/wholesale-iphone-case.html' },
-                        { icon: '🔧', text: '屏幕维修工具', url: 'https://www.aliexpress.com/w/wholesale-screen-repair.html' }
-                    ]
-                }
-            ]
-        };
+function detectLang() {
+    const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    if (nav.startsWith('zh-tw') || nav.startsWith('zh-hant')) return 'zh-tw';
+    if (nav.startsWith('zh')) return 'zh-cn';
+    if (nav.startsWith('es')) return 'es';
+    if (nav.startsWith('pt')) return 'pt';
+    if (nav.startsWith('fr')) return 'fr';
+    return 'en';
+}
 
-        function renderThreads(lang) {
-            const container = document.getElementById('main-content');
-            const threads = threadsData[lang] || [];
-            
-            container.innerHTML = threads.map(thread => `
-                <div class="thread-card">
-                    <a href="thread.html?id=${thread.id}" class="thread-title">
-                        ${thread.emoji} ${thread.title}
-                    </a>
-                    <div class="thread-meta">
-                        📍 ${thread.source} | 👍 ${thread.upvotes.toLocaleString()} | 💬 ${thread.comments_count}
-                    </div>
-                    <div class="related-products">
-                        <div class="products-title">💡 Related:</div>
-                        <div class="product-links">
-                            ${thread.products.map(p => `
-                                <a href="${p.url}" class="product-link" target="_blank">
-                                    ${p.icon} ${p.text}
-                                </a>
-                            `).join('')}
-                        </div>
-                    </div>
+function renderThreads(lang) {
+    const container = document.getElementById('main-content');
+    const threads = threadsData[lang] || [];
+    container.innerHTML = threads.map(t => `
+        <div class="thread-card">
+            <a href="thread.html?id=${t.id}" class="thread-title">${t.emoji} ${t.title}</a>
+            <div class="thread-meta">📍 ${t.source} | 👍 ${t.upvotes.toLocaleString()} | 💬 ${t.comments_count}</div>
+            <div class="related-products">
+                <div class="products-title">💡 Related:</div>
+                <div class="product-links">
+                    ${t.products.map(p => `<a href="${p.url}" class="product-link" target="_blank">${p.icon} ${p.text}</a>`).join('')}
                 </div>
-            `).join('');
-            
-            renderPopularThreads(threads);
-        }
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('popular-threads').innerHTML = threads.slice(0,5).map(t => `
+        <div class="popular-thread" onclick="location.href='thread.html?id=${t.id}'">
+            <div style="color:#2c3e50;font-size:0.95rem;margin-bottom:5px;">${t.emoji} ${t.title.substring(0,60)}...</div>
+            <div style="color:#999;font-size:0.8rem;">👍 ${t.upvotes.toLocaleString()}</div>
+        </div>
+    `).join('');
+}
 
-        function renderPopularThreads(threads) {
-            const container = document.getElementById('popular-threads');
-            const popular = threads.slice(0, 5);
-            
-            container.innerHTML = popular.map(thread => `
-                <div class="popular-thread" onclick="location.href='thread.html?id=${thread.id}'">
-                    <div style="color:#2c3e50; font-size:0.95rem; margin-bottom:5px;">
-                        ${thread.emoji} ${thread.title.substring(0, 60)}...
-                    </div>
-                    <div style="color:#999; font-size:0.8rem;">
-                        👍 ${thread.upvotes.toLocaleString()}
-                    </div>
-                </div>
-            `).join('');
-        }
+function setActiveLang(lang) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.lang === lang));
+    renderThreads(lang);
+}
 
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                renderThreads(this.dataset.lang);
-            });
-        });
+document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', function() { setActiveLang(this.dataset.lang); }));
 
-        renderThreads('en');
-    </script>
+// 初期表示：ブラウザ言語を自動検出して該当タブをアクティブに
+setActiveLang(detectLang());
+</script>
 </body>
 </html>
